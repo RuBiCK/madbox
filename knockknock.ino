@@ -18,6 +18,7 @@
    Update: Jan 20 10: Removed the "pinMode(knockSensor, OUTPUT);" line since it makes no sense and doesn't do anything.
  */
  
+ #include <Servo.h>
 // Pin definitions
 const int knockSensor = 0;         // Piezo sensor on pin 0.
 const int programSwitch = 2;       // If this is high we program a new code.
@@ -42,8 +43,11 @@ int knockReadings[maximumKnocks];   // When someone knocks this array fills with
 int knockSensorValue = 0;           // Last reading of the knock sensor.
 int programButtonPressed = false;   // Flag so we remember the programming button setting at the end of the cycle.
 
+Servo myservo;
+int pos=0;
+
 void setup() {
-  pinMode(lockMotor, OUTPUT);
+  myservo.attach(lockMotor);
   pinMode(redLED, OUTPUT);
   pinMode(greenLED, OUTPUT);
   pinMode(programSwitch, INPUT);
@@ -160,12 +164,19 @@ void triggerDoorUnlock(){
   int i=0;
   
   // turn the motor on for a bit.
-  digitalWrite(lockMotor, HIGH);
+//  digitalWrite(lockMotor, HIGH);
   digitalWrite(greenLED, HIGH);            // And the green LED too.
   
   delay (lockTurnTime);                    // Wait a bit.
   
-  digitalWrite(lockMotor, LOW);            // Turn the motor off.
+//  digitalWrite(lockMotor, LOW);            // Turn the motor off.
+
+  for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
+    // in steps of 1 degree
+    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+    delay(15);                       // waits 15ms for the servo to reach the position
+  }
+
   
   // Blink the green LED a few times for more visual feedback.
   for (i=0; i < 5; i++){   
