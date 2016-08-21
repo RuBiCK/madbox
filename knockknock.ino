@@ -22,12 +22,12 @@
 // Pin definitions
 const int knockSensor = 0;         // Piezo sensor on pin 0.
 const int programSwitch = 2;       // If this is high we program a new code.
-const int lockMotor = 3;           // Gear motor used to turn the lock.
+const int lockMotor = 3;             // Gear motor used to turn the lock.
 const int redLED = 4;              // Status LED
 const int greenLED = 5;            // Status LED
  
 // Tuning constants.  Could be made vars and hoooked to potentiometers for soft configuration, etc.
-const int threshold = 1;           // Minimum signal from the piezo to register as a knock
+const int threshold = 10;           // Minimum signal from the piezo to register as a knock
 const int rejectValue = 25;        // If an individual knock is off by this percentage of a knock we don't unlock..
 const int averageRejectValue = 15; // If the average timing of the knocks is off by this percent we don't unlock.
 const int knockFadeTime = 150;     // milliseconds we allow a knock to fade before we listen for another one. (Debounce timer.)
@@ -61,7 +61,8 @@ void setup() {
 void loop() {
   // Listen for any knock at all.
   knockSensorValue = analogRead(knockSensor);
-  
+    Serial.println(knockSensorValue);             // debug value
+
   if (digitalRead(programSwitch)==HIGH){  // is the program button pressed?
     programButtonPressed = true;          // Yes, so lets save that state
     digitalWrite(redLED, HIGH);           // and turn on the red light too so we know we're programming.
@@ -101,6 +102,8 @@ void listenToSecretKnock(){
   do {
     //listen for the next knock or wait for it to timeout. 
     knockSensorValue = analogRead(knockSensor);
+        Serial.println(knockSensorValue);             // debug value
+
     if (knockSensorValue >=threshold){                   //got another knock...
       //record the delay time.
       Serial.println("knock.");
