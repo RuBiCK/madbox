@@ -20,14 +20,14 @@
  
  #include <Servo.h>
 // Pin definitions
-const int knockSensor = 0;         // Piezo sensor on pin 0.
+const int knockSensor = A0;         // Piezo sensor on pin 0.
 const int programSwitch = 2;       // If this is high we program a new code.
 const int lockMotor = 3;             // Gear motor used to turn the lock.
 const int redLED = 4;              // Status LED
 const int greenLED = 5;            // Status LED
  
 // Tuning constants.  Could be made vars and hoooked to potentiometers for soft configuration, etc.
-const int threshold = 10;           // Minimum signal from the piezo to register as a knock
+const int threshold = 1;           // Minimum signal from the piezo to register as a knock
 const int rejectValue = 25;        // If an individual knock is off by this percentage of a knock we don't unlock..
 const int averageRejectValue = 15; // If the average timing of the knocks is off by this percent we don't unlock.
 const int knockFadeTime = 150;     // milliseconds we allow a knock to fade before we listen for another one. (Debounce timer.)
@@ -56,6 +56,7 @@ void setup() {
   Serial.println("Program start.");  			// but feel free to comment them out after it's working right.
   
   digitalWrite(greenLED, HIGH);      // Green LED on, everything is go.
+      myservo.write(0);  
 }
 
 void loop() {
@@ -174,11 +175,12 @@ void triggerDoorUnlock(){
   
 //  digitalWrite(lockMotor, LOW);            // Turn the motor off.
 
-  for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
+  /*for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
-    myservo.write(pos);              // tell servo to go to position in variable 'pos'
+   myservo.write(90);              // tell servo to go to position in variable 'pos'
     delay(15);                       // waits 15ms for the servo to reach the position
-  }
+  }*/
+    myservo.write(90);  
 
   
   // Blink the green LED a few times for more visual feedback.
